@@ -16,6 +16,5 @@ setup(
         'torchaudio',
         'tqdm',
         'wandb',
-        'cached_conv @ git+https://github.com/caillonantoine/cached_conv.git',
     ],
 )
