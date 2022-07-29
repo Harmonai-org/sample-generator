@@ -4,7 +4,7 @@ from torchaudio import transforms as T
 import random
 from glob import glob
 import os
-from diffusion.utils import Stereo, PadCrop, RandomPhaseInvert
+from audio_diffusion.utils import Stereo, PadCrop, RandomPhaseInvert
 import tqdm
 from multiprocessing import Pool, cpu_count
 from functools import partial
