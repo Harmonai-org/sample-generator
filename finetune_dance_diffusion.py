@@ -49,7 +49,10 @@ def sample(model, x, steps, eta, mapping_cond=None, unet_cond=None):
 
     # Create the noise schedule
     t = torch.linspace(1, 0, steps + 1)[:-1]
-    alphas, sigmas = get_alphas_sigmas(get_crash_schedule(t))
+
+    t = get_crash_schedule(t)
+
+    alphas, sigmas = get_alphas_sigmas(t)
 
     # The sampling loop
     for i in trange(steps):
@@ -99,8 +102,10 @@ class DiffusionUncond(nn.Module):
         # Draw uniformly distributed continuous timesteps
         t = self.rng.draw(reals.shape[0])[:, 0].to(self.device)
 
+        t = get_crash_schedule(t)
+
         # Calculate the noise schedule parameters for those timesteps
-        alphas, sigmas = get_alphas_sigmas(get_crash_schedule(t))
+        alphas, sigmas = get_alphas_sigmas(t)
 
         # Combine the ground truth images and the noise
         alphas = alphas[:, None, None]
