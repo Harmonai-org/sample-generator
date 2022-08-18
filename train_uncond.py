@@ -22,7 +22,7 @@ from dataset.dataset import SampleDataset
 
 from audio_diffusion.models import DiffusionAttnUnet1D
 from audio_diffusion.utils import ema_update
-from viz.viz import embeddings_table, pca_point_cloud, audio_spectrogram_image, tokens_spectrogram_image
+from viz.viz import audio_spectrogram_image
 
 
 # Define the noise schedule and sampling loop
