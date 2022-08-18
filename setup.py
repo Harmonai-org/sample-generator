@@ -7,10 +7,10 @@ setup(
     author='Zach Evans',
     packages=find_packages(),    
     install_requires=[
-        'accelerate',
         'einops',
         'pandas',
         'prefigure', 
+        'pytorch_lightning',
         'scipy',
         'torch',
         'torchaudio',
