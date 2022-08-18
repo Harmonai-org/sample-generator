@@ -146,16 +146,17 @@ class DemoCallback(pl.Callback):
         self.demo_samples = global_args.sample_size
         self.demo_steps = global_args.demo_steps
         self.sample_rate = global_args.sample_rate
+        self.last_demo_step = -1
 
     @rank_zero_only
     @torch.no_grad()
     #def on_train_epoch_end(self, trainer, module):
     def on_train_batch_end(self, trainer, module, outputs, batch, batch_idx):        
-        last_demo_step = -1
-        if (trainer.global_step - 1) % self.demo_every != 0 or last_demo_step == trainer.global_step:
+  
+        if (trainer.global_step - 1) % self.demo_every != 0 or self.last_demo_step == trainer.global_step:
             return
         
-        last_demo_step = trainer.global_step
+        self.last_demo_step = trainer.global_step
     
         noise = torch.randn([self.num_demos, 2, self.demo_samples]).to(module.device)
 
