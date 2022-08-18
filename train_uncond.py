@@ -20,8 +20,8 @@ import wandb
 
 from dataset.dataset import SampleDataset
 
-from decoders.diffusion_decoder import DiffusionAttnUnet1D
-from diffusion.model import ema_update
+from audio_diffusion.models import DiffusionAttnUnet1D
+from audio_diffusion.utils import ema_update
 from viz.viz import embeddings_table, pca_point_cloud, audio_spectrogram_image, tokens_spectrogram_image
 
 

@@ -37,7 +37,6 @@ def eval_mode(model):
     the previous mode on exit."""
     return train_mode(model, False)
 
-
 @torch.no_grad()
 def ema_update(model, averaged_model, decay):
     """Incorporates updated model parameters into an exponential moving averaged
