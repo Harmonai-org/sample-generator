@@ -5,5 +5,5 @@ Tools to train a generative model on arbitrary audio samples
 
 - [x] Add inference notebook
 - [x] Add interpolations to nobebook
-- [ ] Add fine-tune notebook
+- [x] Add fine-tune notebook
 - [ ] Add guidance to notebook
