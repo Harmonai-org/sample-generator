@@ -189,6 +189,8 @@ def main():
 
     args.latent_dim = 0
 
+    save_path = None if args.save_path == "" else args.save_path
+
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print('Using device:', device)
     torch.manual_seed(args.seed)
@@ -199,7 +201,7 @@ def main():
     wandb_logger = pl.loggers.WandbLogger(project=args.name)
 
     exc_callback = ExceptionCallback()
-    ckpt_callback = pl.callbacks.ModelCheckpoint(every_n_train_steps=args.checkpoint_every, save_top_k=-1)
+    ckpt_callback = pl.callbacks.ModelCheckpoint(every_n_train_steps=args.checkpoint_every, save_top_k=-1, dirpath=save_path)
     demo_callback = DemoCallback(args)
 
     diffusion_model = DiffusionUncond(args)
