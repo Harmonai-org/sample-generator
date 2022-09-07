@@ -1,11 +1,12 @@
-from contextlib import contextmanager
+import math
+import random
 import warnings
+from contextlib import contextmanager
 
 import torch
-from torch import nn 
-import random 
-import math
+from torch import nn
 from torch import optim
+
 
 def append_dims(x, target_dims):
     """Appends dimensions to the end of a tensor until it has target_dims dimensions."""
@@ -36,6 +37,7 @@ def eval_mode(model):
     """A context manager that places a model into evaluation mode and restores
     the previous mode on exit."""
     return train_mode(model, False)
+
 
 @torch.no_grad()
 def ema_update(model, averaged_model, decay):
@@ -149,6 +151,7 @@ class InverseLR(optim.lr_scheduler._LRScheduler):
 def get_alphas_sigmas(t):
     return torch.cos(t * math.pi / 2), torch.sin(t * math.pi / 2)
 
+
 def append_dims(x, target_dims):
     """Appends dimensions to the end of a tensor until it has target_dims dimensions."""
     dims_to_append = target_dims - x.ndim
@@ -156,8 +159,10 @@ def append_dims(x, target_dims):
         raise ValueError(f'input has {x.ndim} dims but target_dims is {target_dims}, which is less')
     return x[(...,) + (None,) * dims_to_append]
 
+
 def expand_to_planes(input, shape):
     return input[..., None].repeat([1, 1, shape[2]])
+
 
 class PadCrop(nn.Module):
     def __init__(self, n_samples, randomize=True):
@@ -173,23 +178,26 @@ class PadCrop(nn.Module):
         output[:, :min(s, self.n_samples)] = signal[:, start:end]
         return output
 
+
 class RandomPhaseInvert(nn.Module):
     def __init__(self, p=0.5):
         super().__init__()
         self.p = p
+
     def __call__(self, signal):
         return -signal if (random.random() < self.p) else signal
 
-class Stereo(nn.Module):
-  def __call__(self, signal):
-    signal_shape = signal.shape
-    # Check if it's mono
-    if len(signal_shape) == 1: # s -> 2, s
-        signal = signal.unsqueeze(0).repeat(2, 1)
-    elif len(signal_shape) == 2:
-        if signal_shape[0] == 1: #1, s -> 2, s
-            signal = signal.repeat(2, 1)
-        elif signal_shape[0] > 2: #?, s -> 2,s
-            signal = signal[:2, :]    
 
-    return signal
+class Stereo(nn.Module):
+    def __call__(self, signal):
+        signal_shape = signal.shape
+        # Check if it's mono
+        if len(signal_shape) == 1:  # s -> 2, s
+            signal = signal.unsqueeze(0).repeat(2, 1)
+        elif len(signal_shape) == 2:
+            if signal_shape[0] == 1:  # 1, s -> 2, s
+                signal = signal.repeat(2, 1)
+            elif signal_shape[0] > 2:  # ?, s -> 2,s
+                signal = signal[:2, :]
+
+        return signal

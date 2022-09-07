@@ -1,27 +1,13 @@
-
-import math
-from pathlib import Path
 from matplotlib.backends.backend_agg import FigureCanvasAgg
-import matplotlib.cm as cm
-import matplotlib.pyplot as plt 
-from matplotlib.colors import Normalize
-from matplotlib.figure import Figure
+import librosa
 import numpy as np
-from PIL import Image
-
-import torch
-from torch import optim, nn
-from torch.nn import functional as F
-import torchaudio
 import torchaudio.transforms as T
-import librosa 
-from einops import rearrange
+from PIL import Image
+from matplotlib.backends.backend_agg import FigureCanvasAgg
+from matplotlib.figure import Figure
 
-import wandb
-import numpy as np
-import pandas as pd
 
-def spectrogram_image(spec, title=None, ylabel='freq_bin', aspect='auto', xmax=None, db_range=[35,120]):
+def spectrogram_image(spec, title=None, ylabel='freq_bin', aspect='auto', xmax=None, db_range=[35, 120]):
     """
     # cf. https://pytorch.org/tutorials/beginner/audio_feature_extractions_tutorial.html
 
@@ -51,10 +37,10 @@ def audio_spectrogram_image(waveform, power=2.0, sample_rate=48000):
     n_mels = 80
 
     mel_spectrogram_op = T.MelSpectrogram(
-        sample_rate=sample_rate, n_fft=n_fft, win_length=win_length, 
-        hop_length=hop_length, center=True, pad_mode="reflect", power=power, 
+        sample_rate=sample_rate, n_fft=n_fft, win_length=win_length,
+        hop_length=hop_length, center=True, pad_mode="reflect", power=power,
         norm='slaney', onesided=True, n_mels=n_mels, mel_scale="htk")
 
     melspec = mel_spectrogram_op(waveform.float())
-    melspec = melspec[0] # TODO: only left channel for now
+    melspec = melspec[0]  # TODO: only left channel for now
     return spectrogram_image(melspec, title="MelSpectrogram", ylabel='mel bins (log freq)')
