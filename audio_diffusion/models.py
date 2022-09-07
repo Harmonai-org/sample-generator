@@ -3,19 +3,22 @@ from torch import nn
 from torch.nn import functional as F
 
 from .blocks import SkipBlock, FourierFeatures, SelfAttention1d, ResConvBlock, Downsample1d, Upsample1d
-from .utils import append_dims, expand_to_planes
+from .utils import expand_to_planes
+
 
 class DiffusionAttnUnet1D(nn.Module):
     def __init__(
-        self, 
-        global_args, 
-        io_channels = 2, 
-        depth=14, 
-        n_attn_layers = 6,
-        c_mults = [128, 128, 256, 256] + [512] * 10
+            self,
+            global_args,
+            io_channels=2,
+            depth=14,
+            n_attn_layers=6,
+            c_mults=None
     ):
         super().__init__()
 
+        if c_mults is None:
+            c_mults = [128, 128, 256, 256] + [512] * 10
         self.timestep_embed = FourierFeatures(1, 16)
 
         attn_layer = depth - n_attn_layers - 1
@@ -72,11 +75,11 @@ class DiffusionAttnUnet1D(nn.Module):
 
     def forward(self, input, t, cond=None):
         timestep_embed = expand_to_planes(self.timestep_embed(t[:, None]), input.shape)
-        
+
         inputs = [input, timestep_embed]
 
         if cond is not None:
-            cond = F.interpolate(cond, (input.shape[2], ), mode='linear', align_corners=False)
+            cond = F.interpolate(cond, (input.shape[2],), mode='linear', align_corners=False)
             inputs.append(cond)
 
         return self.net(torch.cat(inputs, dim=1))
