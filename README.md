@@ -6,7 +6,7 @@ Dance Diffusion notebook: [![Open In Colab](https://colab.research.google.com/as
 Dance Diffusion fine-tune notebook: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Harmonai-org/sample-generator/blob/main/Finetune_Dance_Diffusion.ipynb)
 
 ## Prerequisites
-Dance Diffusion requires Python 3.8+
+Dance Diffusion requires Python 3.7+
 
 You can install the required packages by running `pip install .` from the root of the repo
 
