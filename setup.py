@@ -8,7 +8,6 @@ setup(
     packages=find_packages(),    
     install_requires=[
         'einops',
-        'gradio',
         'pandas',
         'prefigure', 
         'pytorch_lightning',
