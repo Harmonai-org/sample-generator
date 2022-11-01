@@ -13,7 +13,7 @@ from torch.nn import functional as F
 from torch.utils import data
 from tqdm import trange
 import pytorch_lightning as pl
-from pytorch_lightning.utilities.distributed import rank_zero_only
+from pytorch_lightning.utilities.rank_zero import rank_zero_only
 from einops import rearrange
 import torchaudio
 import wandb
