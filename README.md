@@ -8,7 +8,6 @@ Dance Diffusion fine-tune notebook: [![Open In Colab](https://colab.research.goo
 ## **🤗 Diffusers library**
 
 Dance Diffusion is now easily accesible with the Hugging Face Hub and the 🧨 Diffusers library.
-You can generate music with just a couple lines of Python code.
 
 1. Install diffusers
 ```
@@ -37,7 +36,7 @@ for audio in audios:
     display(ipd.Audio(audio, rate=pipe.unet.sample_rate))
 ```
 
-### Official checkpoints with examples
+### Checkpoints with examples on the Hub
 
 - [maestro-150k](https://huggingface.co/harmonai/maestro-150k)
 - [jmann-small-190k](https://huggingface.co/harmonai/jmann-small-190k)
@@ -47,9 +46,9 @@ for audio in audios:
 - [jmann-large-580k](https://huggingface.co/harmonai/jmann-large-580k)
 
 
-### Official demo
+### Demo
 
-🚀 The official dance diffusion demo is available under [harmonai/dance-diffusion](https://huggingface.co/spaces/harmonai/dance-diffusion)
+🚀 You can try out a demo of dance diffusion under [harmonai/dance-diffusion](https://huggingface.co/spaces/harmonai/dance-diffusion)
 
 ## Prerequisites
 Dance Diffusion requires Python 3.7+
