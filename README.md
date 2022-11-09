@@ -14,7 +14,7 @@ Dance Diffusion is now easily accesible with the Hugging Face Hub and the 🧨 D
 pip install diffusers[torch] accelerate scipy
 ```
 
-Now you can generate music files with just 10 lines of code:
+2. Now you can generate music files with just 10 lines of code:
 
 ```python
 from diffusers import DiffusionPipeline
