@@ -7,7 +7,9 @@ setup(
     author='Zach Evans',
     packages=find_packages(),    
     install_requires=[
+        'aeiou',
         'einops',
+        'ema_pytorch',
         'pandas',
         'prefigure', 
         'pytorch_lightning',
