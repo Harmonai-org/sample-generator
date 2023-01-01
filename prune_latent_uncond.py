@@ -1,36 +1,9 @@
-#@title Imports and definitions
 import argparse 
-from contextlib import contextmanager
-from copy import deepcopy
-import math
-from pathlib import Path
-
-import sys
-import gc
+import torch
 
 from audio_diffusion.autoencoders import AudioAutoencoder
 from audio_diffusion.models import LatentAudioDiffusion
-from ema_pytorch import EMA
-from audio_diffusion_pytorch.modules import UNetConditional1d
-
 from trainers.trainers import LatentAudioDiffusionTrainer
-
-from audio_diffusion_pytorch import T5Embedder, NumberEmbedder
-
-import torch
-from torch import optim, nn
-from torch.nn import functional as F
-from torch.utils import data
-from tqdm import trange
-from einops import rearrange
-
-import torchaudio
-from decoders.diffusion_decoder import DiffusionAttnUnet1D
-import numpy as np
-
-import random
-from glob import glob
-
 from torch.nn.parameter import Parameter
 
 def prune_ckpt_weights(trainer_state_dict):
@@ -45,21 +18,20 @@ def prune_ckpt_weights(trainer_state_dict):
           
   return new_state_dict
 
-
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--ckpt_path', help='Path to the checkpoint to be pruned')
+    parser.add_argument('--ckpt-path', help='Path to the checkpoint to be pruned')
     parser.add_argument('--sample-rate', help='Sample rate used for the model')
     parser.add_argument('--ld-sample-size', help='Number of samples used during training for the latent diffusion model')
     args = parser.parse_args()
 
     print("Creating the model...")
 
-    first_stage_config = {"capacity": 64, "c_mults": [2, 4, 8, 16, 32], "strides": [2, 2, 2, 2, 2], "latent_dim": 32}
+    ae_config = {"channels": 64, "c_mults": [2, 4, 8, 16, 32], "strides": [2, 2, 2, 2, 2], "latent_dim": 32}
 
-    first_stage_autoencoder = AudioAutoencoder( 
-        **first_stage_config
+    autoencoder = AudioAutoencoder( 
+        **ae_config
     ).eval()
 
     latent_diffusion_config = {"io_channels": 32, "n_attn_layers": 4, "channels": [512]*6 + [1024]*4, "depth": 10}
@@ -80,6 +52,6 @@ if __name__ == "__main__":
     new_ckpt["sample_rate"] = args.sample_rate
     new_ckpt["ld_sample_size"] = args.ld_sample_size
 
-    model.load_state_dict(new_ckpt["state_dict"])
+    latent_diffusion_model.load_state_dict(new_ckpt["ld_state_dict"])
 
     torch.save(new_ckpt, f'./pruned.ckpt')

@@ -160,8 +160,7 @@ def main():
     latent_diffusion_model = LatentAudioDiffusion(autoencoder, **latent_diffusion_config)
 
     if args.model_path:
-        model_info = torch.load(args.model_path)
-        latent_diffusion_config = model_info["ld_config"]
+        latent_diffusion_model.load_state_dict(model_info["ld_state_dict"])
 
     latent_diffusion_model.autoencoder.load_state_dict(torch.load(args.ae_ckpt_path)["state_dict"])
 
@@ -184,8 +183,8 @@ def main():
     diffusion_trainer = pl.Trainer(
         devices=args.num_gpus,
         accelerator="gpu",
-        # num_nodes = args.num_nodes,
-        # strategy='ddp_find_unused_parameters_false',
+        num_nodes = args.num_nodes,
+        strategy='ddp_find_unused_parameters_false' if args.num_gpus > 1 else None,
         precision=16,
         accumulate_grad_batches=args.accum_batches, 
         callbacks=[ckpt_callback, demo_callback, exc_callback],
