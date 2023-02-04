@@ -23,14 +23,14 @@ echo Using venv directory: %VENV_DIR%
 :start_venv
 if ["%SKIP_VENV%"] == ["1"] goto :skip_venv
 dir "%VENV_DIR%\Scripts\python.exe" >tmp/stdout.txt 2>tmp/stderr.txt
-if %ERRORLEVEL% NEQ 0 (goto :create_env)
+if %ERRORLEVEL% NEQ 0 (goto :create_venv)
 goto :activate_venv
 
 :create_venv
 echo Creating virtual environment...
 %PYTHON_FULL_PATH% -m venv "%VENV_DIR%" >tmp/stdout.txt 2>tmp/stderr.txt
 if %ERRORLEVEL% NEQ 0 (echo Failed to create virtual environment. && goto :error_end)
-goto :activate_env
+goto :activate_venv
 
 :activate_venv
 call %VENV_DIR%\Scripts\activate.bat
