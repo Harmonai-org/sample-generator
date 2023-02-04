@@ -82,12 +82,15 @@ if %ERRORLEVEL% NEQ 0 (echo Failed to install pytorch && goto :error_end)
 
 
 echo Setup complete! You can now run launch.bat to launch jupyter-lab in the virtual environment.
+pause
+
 goto :end
 
 
 goto :end
 :error_end
 echo An error occurred. Please see the output above for more information.
+pause
 
 
 :end
