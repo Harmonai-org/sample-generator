@@ -197,7 +197,7 @@ def main():
 
     train_set = SampleDataset([args.training_dir], args)
     train_dl = data.DataLoader(train_set, args.batch_size, shuffle=True,
-                               num_workers=args.num_workers, persistent_workers=True, pin_memory=True)
+                               num_workers=args.num_workers, persistent_workers=True, pin_memory=True, drop_last=True)
     wandb_logger = pl.loggers.WandbLogger(project=args.name, log_model='all' if args.save_wandb=='all' else None)
 
     exc_callback = ExceptionCallback()
