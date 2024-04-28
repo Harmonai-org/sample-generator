@@ -52,7 +52,10 @@ class SkipBlock(nn.Module):
         self.main = nn.Sequential(*main)
 
     def forward(self, input):
-        return torch.cat([self.main(input), input], dim=1)
+        main = self.main(input)
+        pad = (0, (input.size(-1) - main.size(-1)))
+        main = torch.nn.functional.pad(main, pad)
+        return main
 
 class FourierFeatures(nn.Module):
     def __init__(self, in_features, out_features, std=1.):
